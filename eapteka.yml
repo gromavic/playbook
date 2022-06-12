@@ -1,0 +1,22 @@
+---
+- name: EApteka
+  hosts: linux_servers
+  become: true
+
+  tasks:
+  - name: Install Docker
+    apt: name=docker state=latest 
+
+  - name: Instal git
+    apt: name=git state=latest
+
+  - name: Clone repository of project
+    ansible.builtin.git:
+      repo: 'https://github.com/gromavic/etest.git'
+      dest: /home/grom/project
+      clone: yes
+  - name: Start project
+    community.docker.docker_compose:
+     project_name: EApteka
+     project_src: /home/grom/project
+     state: present
